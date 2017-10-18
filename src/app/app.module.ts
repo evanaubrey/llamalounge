@@ -8,6 +8,19 @@ import { MyApp } from './app.component';
 import { HomePage } from '../pages/home/home';
 import { AuthProvider } from '../providers/auth/auth';
 
+import { AngularFireModule } from 'angularfire2';
+import { AngularFireAuthModule } from 'angularfire2/auth';
+
+// AF2 Settings
+const firebaseConfig = {
+  apiKey: "AIzaSyC2gGVlBGrBxTS4IxauvXq-HsFLwcnNHtM",
+  authDomain: "llama-lounge.firebaseapp.com",
+  databaseURL: "https://llama-lounge.firebaseio.com",
+  projectId: "llama-lounge",
+  storageBucket: "llama-lounge.appspot.com",
+  messagingSenderId: "18272820898"
+};
+
 @NgModule({
   declarations: [
     MyApp,
@@ -15,7 +28,9 @@ import { AuthProvider } from '../providers/auth/auth';
   ],
   imports: [
     BrowserModule,
-    IonicModule.forRoot(MyApp)
+    IonicModule.forRoot(MyApp),
+    AngularFireModule.initializeApp(firebaseConfig),
+    AngularFireAuthModule
   ],
   bootstrap: [IonicApp],
   entryComponents: [

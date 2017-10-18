@@ -2,7 +2,7 @@ import { Component } from '@angular/core';
 import { Platform } from 'ionic-angular';
 import { StatusBar } from '@ionic-native/status-bar';
 import { SplashScreen } from '@ionic-native/splash-screen';
-import firebase from 'firebase';
+import { AngularFireAuth } from 'angularfire2/auth';
 
 
 import { HomePage } from '../pages/home/home';
@@ -13,14 +13,15 @@ import { HomePage } from '../pages/home/home';
 export class MyApp {
   rootPage:any;
 
-  constructor(platform: Platform, statusBar: StatusBar, splashScreen: SplashScreen) {
-    firebase.initializeApp({
-      apiKey: "AIzaSyC2gGVlBGrBxTS4IxauvXq-HsFLwcnNHtM",
-      authDomain: "llama-lounge.firebaseapp.com",
-      databaseURL: "https://llama-lounge.firebaseio.com",
-      projectId: "llama-lounge",
-      storageBucket: "llama-lounge.appspot.com",
-      messagingSenderId: "18272820898"
+  constructor(platform: Platform, afAuth: AngularFireAuth, statusBar: StatusBar, splashScreen: SplashScreen) {
+    const authObserver = afAuth.authState.subscribe( user => {
+      if (user) {
+        this.rootPage = HomePage;
+        authObserver.unsubscribe();
+      } else {
+        this.rootPage = 'LoginPage';
+        authObserver.unsubscribe();
+      }
     });
 
     platform.ready().then(() => {
@@ -31,12 +32,3 @@ export class MyApp {
     });
   }
 }
-const unsubscribe = firebase.auth().onAuthStateChanged( user => {
-  if (!user) {
-    this.rootPage = 'LoginPage';
-    unsubscribe();
-  } else {
-    this.rootPage = HomePage;
-    unsubscribe();
-  }
-});
